@@ -1,10 +1,9 @@
-
 import { z } from "zod";
 import { statusValues } from "./project.entity.js";
 
 export const createProjectSchema = z.object({
-  nome: z.string().trim().min(1),
-  cliente: z.string().trim().min(1),
+  nome: z.string().trim().min(1).nonempty(),
+  cliente: z.string().trim().min(1).nonempty(),
   dataInicio: z.number().int(),
   dataEntrega: z.number().int(),
   idEquipe: z.number().int().positive().nullable().optional(),
