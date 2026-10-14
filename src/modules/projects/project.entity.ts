@@ -10,8 +10,8 @@ export interface Project {
   id: number;
   nome: string;
   cliente: string;
-  dataInicio: number;
-  dataEntrega: number;
+  dataInicio: Date;
+  dataEntrega: Date;
   status: StatusProjeto;
   idEquipe: number | null;
 }

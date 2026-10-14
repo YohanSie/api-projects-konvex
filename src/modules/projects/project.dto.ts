@@ -1,19 +1,21 @@
 import { z } from "zod";
 import { statusValues } from "./project.entity.js";
 
+const dateSchema = z.iso.date();
+
 export const createProjectSchema = z.object({
-  nome: z.string().trim().min(1).nonempty(),
-  cliente: z.string().trim().min(1).nonempty(),
-  dataInicio: z.number().int(),
-  dataEntrega: z.number().int(),
+  nome: z.string().trim().min(1),
+  cliente: z.string().trim().min(1),
+  dataInicio: dateSchema,
+  dataEntrega: dateSchema,
   idEquipe: z.number().int().positive().nullable().optional(),
 });
 
 export const updateProjectSchema = z.object({
   nome: z.string().trim().min(1).optional(),
   cliente: z.string().trim().min(1).optional(),
-  dataInicio: z.number().int().optional(),
-  dataEntrega: z.number().int().optional(),
+  dataInicio: dateSchema.optional(),
+  dataEntrega: dateSchema.optional(),
   status: z.enum(statusValues).optional(),
   idEquipe: z.number().int().positive().nullable().optional(),
 }).refine(
