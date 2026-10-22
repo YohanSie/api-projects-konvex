@@ -1,4 +1,4 @@
-import type { Request, Response, NextFunction } from "express";
+import type { Request, Response } from "express";
 import {ProjectService} from "./project.service.js";
 import {
     createProjectSchema, projectParamSchema,
