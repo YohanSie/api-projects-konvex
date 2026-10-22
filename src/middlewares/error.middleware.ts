@@ -1,7 +1,6 @@
 import type {
     Request,
-    Response,
-    NextFunction,
+    Response
 } from "express";
 import { ZodError } from "zod";
 
@@ -9,7 +8,6 @@ export function errorMiddleware(
     error: unknown,
     _req: Request,
     res: Response,
-    _next: NextFunction
 ): void {
     if (error instanceof ZodError) {
         res.status(400).json({
