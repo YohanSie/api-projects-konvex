@@ -1,7 +1,7 @@
-import type { Project } from "./project.entity.js";
+import type {Project} from "./project.entity.js";
 
 export class ProjectRepository {
-    private projects: Project[] = [];
+    private readonly projects: Project[] = [];
     private nextId = 1;
 
     findAll(): Project[] {
@@ -9,16 +9,26 @@ export class ProjectRepository {
     }
 
     findById(id: number): Project | undefined {
-        return this.projects.find((project) => project.id === id);
+        return this.projects.find(
+            (project) => project.id === id
+        );
     }
 
     create(project: Omit<Project, "id">): Project {
-        const newProject = { id: this.nextId++, ...project};
+        const newProject: Project = {
+            id: this.nextId++,
+            ...project,
+        };
+
         this.projects.push(newProject);
+
         return newProject;
     }
 
-    update(id: number, data: Partial<Omit<Project, "id">>): Project | undefined {
+    update(
+        id: number,
+        data: Partial<Omit<Project, "id">>
+    ): Project | undefined {
         const project = this.findById(id);
 
         if (!project) {
@@ -32,10 +42,10 @@ export class ProjectRepository {
 
     delete(id: number): boolean {
         const index = this.projects.findIndex(
-            (project) => project.id === id,
+            (project) => project.id === id
         );
 
-        if (index > -1) {
+        if (index === -1) {
             return false;
         }
 
