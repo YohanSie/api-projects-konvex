@@ -2,12 +2,11 @@ import { Router } from "express";
 import { ProjectRepository } from "./project.repository.js";
 import { ProjectService } from "./project.service.js";
 import { ProjectController } from "./project.controller.js";
-import {EquipeRepository} from "../equipes/equipe.repository.js";
+import { equipeRepository } from "../equipes/equipe.repository.instance.js";
 
 const router = Router();
 
 const projectRepository = new ProjectRepository();
-const equipeRepository = new EquipeRepository();
 const projectService = new ProjectService(projectRepository, equipeRepository);
 const projectController = new ProjectController(projectService);
 

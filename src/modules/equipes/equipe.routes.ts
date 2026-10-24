@@ -1,11 +1,10 @@
 import { Router } from "express";
-import { EquipeRepository } from "./equipe.repository.js";
+import { equipeRepository } from "./equipe.repository.instance.js";
 import { EquipeService } from "./equipe.service.js";
 import { EquipeController } from "./equipe.controller.js";
 
 const router = Router();
 
-const equipeRepository = new EquipeRepository();
 const equipeService = new EquipeService(equipeRepository);
 const equipeController = new EquipeController(equipeService);
 
