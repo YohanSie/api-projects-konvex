@@ -4,7 +4,7 @@ export const statusValues = [
   "concluido",
 ] as const;
 
-export type StatusProjeto = typeof statusValues[number];
+export type StatusProjeto = (typeof statusValues)[number];
 
 export interface Project {
   id: number;

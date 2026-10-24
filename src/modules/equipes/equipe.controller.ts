@@ -1,52 +1,50 @@
-import type {Request, Response} from "express";
-import {EquipeService} from "./equipe.service.js";
+import type { Request, Response } from "express";
+import { EquipeService } from "./equipe.service.js";
 import {
-    createEquipeSchema,
-    updateEquipeSchema,
-    equipeParamSchema
+  createEquipeSchema,
+  updateEquipeSchema,
+  equipeParamSchema,
 } from "./equipe.dto.js";
 
 export class EquipeController {
-    constructor(
-        private readonly equipeService: EquipeService
-    ) { }
+  constructor(private readonly equipeService: EquipeService) {}
 
-    findAll = (_req: Request, res: Response): void => {
-        const equipes = this.equipeService.findAll();
+  findAll = (_req: Request, res: Response): void => {
+    const equipes = this.equipeService.findAll();
 
-        res.status(200).json(equipes);
-    };
+    res.status(200).json(equipes);
+  };
 
-    findById = (req: Request, res: Response): void => {
-        const {id} = equipeParamSchema.parse(req.params);
+  findById = (req: Request, res: Response): void => {
+    const { id } = equipeParamSchema.parse(req.params);
 
-        const equipe = this.equipeService.findById(id);
+    const equipe = this.equipeService.findById(id);
 
-        res.status(200).json(equipe);
-    };
+    res.status(200).json(equipe);
+  };
 
-    create = (req: Request, res: Response): void => {
-        const data = createEquipeSchema.parse(req.body);
+  create = (req: Request, res: Response): void => {
+    const data = createEquipeSchema.parse(req.body);
 
-        const equipe = this.equipeService.create(data);
+    const equipe = this.equipeService.create(data);
 
-        res.status(201).json(equipe);
-    };
+    res.status(201).json(equipe);
+  };
 
-    update = (req: Request, res: Response): void => {
-        const {id} = equipeParamSchema.parse(req.params);
-        const data = updateEquipeSchema.parse(req.body);
+  update = (req: Request, res: Response): void => {
+    const { id } = equipeParamSchema.parse(req.params);
+    const data = updateEquipeSchema.parse(req.body);
 
-        const equipe = this.equipeService.update(id, data);
+    const equipe = this.equipeService.update(id, data);
 
-        res.status(200).json(equipe);
-    };
+    res.status(200).json(equipe);
+  };
 
-    delete = (req: Request, res: Response): void => {
-        const {id} = equipeParamSchema.parse(req.params);
+  delete = (req: Request, res: Response): void => {
+    const { id } = equipeParamSchema.parse(req.params);
 
-        this.equipeService.delete(id);
+    this.equipeService.delete(id);
 
-        res.status(204).send();
-    };
+    res.status(204).send();
+  };
 }

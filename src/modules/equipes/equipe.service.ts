@@ -1,55 +1,55 @@
-import {EquipeRepository} from "./equipe.repository.js";
-import type {Equipe} from "./equipe.entity.js";
-import {CreateEquipeDto, UpdateEquipeDto} from "./equipe.dto.js";
+import { EquipeRepository } from "./equipe.repository.js";
+import type { Equipe } from "./equipe.entity.js";
+import { CreateEquipeDto, UpdateEquipeDto } from "./equipe.dto.js";
 
 export class EquipeService {
-    constructor(private readonly equipeRepository: EquipeRepository) {}
+  constructor(private readonly equipeRepository: EquipeRepository) {}
 
-    findAll(): Equipe[] {
-        return this.equipeRepository.findAll();
+  findAll(): Equipe[] {
+    return this.equipeRepository.findAll();
+  }
+
+  findById(id: number): Equipe {
+    const equipe = this.equipeRepository.findById(id);
+
+    if (!equipe) {
+      throw new Error("EQUIPE_NOT_FOUND");
     }
 
-    findById(id: number): Equipe {
-        const equipe = this.equipeRepository.findById(id);
+    return equipe;
+  }
 
-        if (!equipe) {
-            throw new Error("EQUIPE_NOT_FOUND");
-        }
+  create(data: CreateEquipeDto): Equipe {
+    const equipeData = {
+      ...data,
+      lider: data.lider,
+      membros: data.membros ?? [],
+    };
 
-        return equipe;
+    return this.equipeRepository.create(equipeData);
+  }
+
+  update(id: number, data: UpdateEquipeDto): Equipe {
+    const equipe = this.equipeRepository.findById(id);
+
+    if (!equipe) {
+      throw new Error("EQUIPE_NOT_FOUND");
     }
 
-    create(data: CreateEquipeDto): Equipe {
-        const equipeData = {
-            ...data,
-            lider: data.lider,
-            membros: data.membros ?? [],
-        }
+    const updatedEquipe = this.equipeRepository.update(id, data);
 
-        return this.equipeRepository.create(equipeData);
+    if (!updatedEquipe) {
+      throw new Error("EQUIPE_NOT_FOUND");
     }
 
-    update(id: number, data: UpdateEquipeDto): Equipe {
-        const equipe = this.equipeRepository.findById(id);
+    return updatedEquipe;
+  }
 
-        if (!equipe) {
-            throw new Error("EQUIPE_NOT_FOUND");
-        }
+  delete(id: number): void {
+    const deleted = this.equipeRepository.delete(id);
 
-        const updatedEquipe = this.equipeRepository.update(id, data);
-
-        if (!updatedEquipe) {
-            throw new Error("EQUIPE_NOT_FOUND");
-        }
-
-        return updatedEquipe;
+    if (!deleted) {
+      throw new Error("EQUIPE_NOT_FOUND");
     }
-
-    delete(id: number): void {
-        const deleted = this.equipeRepository.delete(id);
-
-        if (!deleted) {
-            throw new Error("EQUIPE_NOT_FOUND");
-        }
-    }
+  }
 }
