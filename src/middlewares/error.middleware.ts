@@ -29,6 +29,16 @@ export function errorMiddleware(
         return;
     }
 
+    if (
+        error instanceof Error &&
+        error.message === "EQUIPE_NOT_FOUND"
+    ) {
+        res.status(404).json({
+            message: "Equipe não encontrada",
+        });
+        return;
+    }
+
     console.error(error);
 
     res.status(500).json({

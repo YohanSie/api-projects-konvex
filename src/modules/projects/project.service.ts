@@ -1,9 +1,14 @@
 import {ProjectRepository} from "./project.repository.js";
+import {EquipeRepository} from "../equipes/equipe.repository.js";
 import type {Project} from "./project.entity.js";
 import {CreateProjectDto, UpdateProjectDto} from "./project.dto.js";
 
 export class ProjectService {
-    constructor(private readonly projectRepository: ProjectRepository) {}
+    constructor(
+        private readonly projectRepository: ProjectRepository,
+        private readonly equipeRepository: EquipeRepository
+    ) {
+    }
 
     findAll(): Project[] {
         return this.projectRepository.findAll();
@@ -20,6 +25,8 @@ export class ProjectService {
     }
 
     create(data: CreateProjectDto): Project {
+        this.validateEquipe(data.idEquipe);
+
         const projectData = {
             ...data,
             dataInicio: new Date(data.dataInicio),
@@ -38,7 +45,9 @@ export class ProjectService {
             throw new Error("PROJECT_NOT_FOUND");
         }
 
-        const { dataInicio, dataEntrega, ...rest } = data;
+        this.validateEquipe(data.idEquipe);
+
+        const {dataInicio, dataEntrega, ...rest} = data;
 
         const updatedProject = this.projectRepository.update(id, {
             ...rest,
@@ -62,6 +71,18 @@ export class ProjectService {
 
         if (!deleted) {
             throw new Error("PROJECT_NOT_FOUND");
+        }
+    }
+
+    private validateEquipe(idEquipe: number | null | undefined): void {
+        if (idEquipe == null) {
+            return;
+        }
+
+        const equipe = this.equipeRepository.findById(idEquipe);
+
+        if (!equipe) {
+            throw new Error("EQUIPE_NOT_FOUND");
         }
     }
 }
