@@ -1,4 +1,4 @@
-import express from "express";
+import express, {NextFunction} from "express";
 import projectRoutes from "./modules/projects/project.routes.js";
 import { errorMiddleware } from "./middlewares/error.middleware.js";
 import equipeRoutes from "./modules/equipes/equipe.routes.js";
@@ -15,6 +15,12 @@ app.get("/health", (_req, res) => {
 
 app.use("/projetos", projectRoutes);
 app.use("/equipes", equipeRoutes);
+
+app.use((_req, res) => {
+  res.status(404).json({
+    message: "Endpoint não encontrado",
+  });
+});
 
 app.use(errorMiddleware);
 
