@@ -9,41 +9,41 @@ import {
 export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
 
-  findAll = (_req: Request, res: Response): void => {
-    const projects = this.projectService.findAll();
+  findAll = async (_req: Request, res: Response): Promise<void> => {
+    const projects = await this.projectService.findAll();
 
     res.status(200).json(projects);
   };
 
-  findById = (req: Request, res: Response): void => {
+  findById = async (req: Request, res: Response): Promise<void> => {
     const { id } = projectParamSchema.parse(req.params);
 
-    const project = this.projectService.findById(id);
+    const project = await this.projectService.findById(id);
 
     res.status(200).json(project);
   };
 
-  create = (req: Request, res: Response): void => {
+  create = async (req: Request, res: Response): Promise<void> => {
     const data = createProjectSchema.parse(req.body);
 
-    const project = this.projectService.create(data);
+    const project = await this.projectService.create(data);
 
     res.status(201).json(project);
   };
 
-  update = (req: Request, res: Response): void => {
+  update = async (req: Request, res: Response): Promise<void> => {
     const { id } = projectParamSchema.parse(req.params);
     const data = updateProjectSchema.parse(req.body);
 
-    const project = this.projectService.update(id, data);
+    const project = await this.projectService.update(id, data);
 
     res.status(200).json(project);
   };
 
-  delete = (req: Request, res: Response): void => {
+  delete = async (req: Request, res: Response): Promise<void> => {
     const { id } = projectParamSchema.parse(req.params);
 
-    this.projectService.delete(id);
+    await this.projectService.delete(id);
 
     res.status(204).send();
   };

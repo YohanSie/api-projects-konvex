@@ -7,11 +7,11 @@ export const statusValues = [
 export type StatusProjeto = (typeof statusValues)[number];
 
 export interface Project {
-  id: number;
+  id: string;
   nome: string;
   cliente: string;
   dataInicio: Date;
   dataEntrega: Date;
   status: StatusProjeto;
-  idEquipe: number | null;
+  idEquipe: string | null;
 }

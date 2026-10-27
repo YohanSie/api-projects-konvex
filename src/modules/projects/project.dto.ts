@@ -8,7 +8,7 @@ export const createProjectSchema = z.object({
   cliente: z.string().trim().min(1),
   dataInicio: dateSchema,
   dataEntrega: dateSchema,
-  idEquipe: z.number().int().positive().nullable().optional(),
+  idEquipe: z.uuid().nullable().optional(),
 });
 
 export const updateProjectSchema = z
@@ -18,14 +18,14 @@ export const updateProjectSchema = z
     dataInicio: dateSchema.optional(),
     dataEntrega: dateSchema.optional(),
     status: z.enum(statusValues).optional(),
-    idEquipe: z.number().int().positive().nullable().optional(),
+    idEquipe: z.uuid().nullable().optional(),
   })
   .refine((data) => Object.keys(data).length > 0, {
     message: "Informe ao menos um campo para atualizar.",
   });
 
 export const projectParamSchema = z.object({
-  id: z.coerce.number().int().positive(),
+  id: z.uuid(),
 });
 
 export type CreateProjectDto = z.infer<typeof createProjectSchema>;

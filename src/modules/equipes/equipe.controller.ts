@@ -9,41 +9,41 @@ import {
 export class EquipeController {
   constructor(private readonly equipeService: EquipeService) {}
 
-  findAll = (_req: Request, res: Response): void => {
-    const equipes = this.equipeService.findAll();
+  findAll = async (_req: Request, res: Response): Promise<void> => {
+    const equipes = await this.equipeService.findAll();
 
     res.status(200).json(equipes);
   };
 
-  findById = (req: Request, res: Response): void => {
+  findById = async (req: Request, res: Response): Promise<void> => {
     const { id } = equipeParamSchema.parse(req.params);
 
-    const equipe = this.equipeService.findById(id);
+    const equipe = await this.equipeService.findById(id);
 
     res.status(200).json(equipe);
   };
 
-  create = (req: Request, res: Response): void => {
+  create = async (req: Request, res: Response): Promise<void> => {
     const data = createEquipeSchema.parse(req.body);
 
-    const equipe = this.equipeService.create(data);
+    const equipe = await this.equipeService.create(data);
 
     res.status(201).json(equipe);
   };
 
-  update = (req: Request, res: Response): void => {
+  update = async (req: Request, res: Response): Promise<void> => {
     const { id } = equipeParamSchema.parse(req.params);
     const data = updateEquipeSchema.parse(req.body);
 
-    const equipe = this.equipeService.update(id, data);
+    const equipe = await this.equipeService.update(id, data);
 
     res.status(200).json(equipe);
   };
 
-  delete = (req: Request, res: Response): void => {
+  delete = async (req: Request, res: Response): Promise<void> => {
     const { id } = equipeParamSchema.parse(req.params);
 
-    this.equipeService.delete(id);
+    await this.equipeService.delete(id);
 
     res.status(204).send();
   };

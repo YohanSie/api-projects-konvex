@@ -1,49 +1,76 @@
+import { Prisma, type Equipe as PrismaEquipe } from "../../generated/prisma/client.js";
+import { prisma } from "../../lib/prisma.js";
 import type { Equipe } from "./equipe.entity.js";
 
+function toEquipe(equipe: PrismaEquipe): Equipe {
+  const members = equipe.membros;
+
+  return {
+    id: equipe.id,
+    lider: equipe.lider,
+    membros: Array.isArray(members)
+      ? members.filter((member): member is string => typeof member === "string")
+      : [],
+  };
+}
+
 export class EquipeRepository {
-  private readonly equipes: Equipe[] = [];
-  private nextId = 1;
+  async findAll(): Promise<Equipe[]> {
+    const equipes = await prisma.equipe.findMany();
 
-  findAll(): Equipe[] {
-    return this.equipes;
+    return equipes.map(toEquipe);
   }
 
-  findById(id: number): Equipe | undefined {
-    return this.equipes.find((equipe) => equipe.id === id);
+  async findById(id: string): Promise<Equipe | undefined> {
+    const equipe = await prisma.equipe.findUnique({ where: { id } });
+
+    return equipe ? toEquipe(equipe) : undefined;
   }
 
-  create(data: Omit<Equipe, "id">): Equipe {
-    const equipe: Equipe = {
-      id: this.nextId++,
-      ...data,
-    };
+  async create(data: Omit<Equipe, "id">): Promise<Equipe> {
+    const equipe = await prisma.equipe.create({
+      data: {
+        lider: data.lider,
+        membros: data.membros as Prisma.InputJsonValue,
+      },
+    });
 
-    this.equipes.push(equipe);
-
-    return equipe;
+    return toEquipe(equipe);
   }
 
-  update(id: number, data: Partial<Omit<Equipe, "id">>): Equipe | undefined {
-    const equipe = this.findById(id);
+  async update(id: string, data: Partial<Omit<Equipe, "id">>): Promise<Equipe | undefined> {
+    try {
+      const equipe = await prisma.equipe.update({
+        where: { id },
+        data: {
+          ...data,
+          ...(data.membros !== undefined && {
+            membros: data.membros as Prisma.InputJsonValue,
+          }),
+        },
+      });
 
-    if (!equipe) {
-      return undefined;
+      return toEquipe(equipe);
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
+        return undefined;
+      }
+
+      throw error;
     }
-
-    Object.assign(equipe, data);
-
-    return equipe;
   }
 
-  delete(id: number): boolean {
-    const index = this.equipes.findIndex((equipe) => equipe.id === id);
+  async delete(id: string): Promise<boolean> {
+    try {
+      await prisma.equipe.delete({ where: { id } });
 
-    if (index === -1) {
-      return false;
+      return true;
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
+        return false;
+      }
+
+      throw error;
     }
-
-    this.equipes.splice(index, 1);
-
-    return true;
   }
 }

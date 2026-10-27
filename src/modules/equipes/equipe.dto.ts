@@ -15,7 +15,7 @@ export const updateEquipeSchema = z
   });
 
 export const equipeParamSchema = z.object({
-  id: z.coerce.number().int().positive(),
+  id: z.uuid(),
 });
 
 export type CreateEquipeDto = z.infer<typeof createEquipeSchema>;

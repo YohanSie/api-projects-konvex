@@ -1,0 +1,26 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Project {
+  id          String   @id @default(uuid())
+  nome        String
+  cliente     String
+  dataInicio  DateTime
+  dataEntrega DateTime
+  status      String   @default("nao iniciado")
+  idEquipe    String?
+  equipe      Equipe?  @relation(fields: [idEquipe], references: [id], onDelete: SetNull)
+}
+
+model Equipe {
+  id       String    @id @default(uuid())
+  lider    String
+  membros  Json      @default("[]")
+  projetos Project[]
+}

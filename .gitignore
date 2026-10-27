@@ -38,6 +38,10 @@ web_modules/
 *.tsbuildinfo
 *.tgz
 dist
+dev.db
+prisma-test.db
+uuid-test.db
+src/generated/
 .eslintcache
 .cache
 .parcel-cache

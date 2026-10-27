@@ -9,12 +9,12 @@ export class ProjectService {
     private readonly equipeRepository: EquipeRepository,
   ) {}
 
-  findAll(): Project[] {
+  findAll(): Promise<Project[]> {
     return this.projectRepository.findAll();
   }
 
-  findById(id: number): Project {
-    const project = this.projectRepository.findById(id);
+  async findById(id: string): Promise<Project> {
+    const project = await this.projectRepository.findById(id);
 
     if (!project) {
       throw new Error("PROJECT_NOT_FOUND");
@@ -23,8 +23,8 @@ export class ProjectService {
     return project;
   }
 
-  create(data: CreateProjectDto): Project {
-    this.validateEquipe(data.idEquipe);
+  async create(data: CreateProjectDto): Promise<Project> {
+    await this.validateEquipe(data.idEquipe);
 
     const projectData = {
       ...data,
@@ -37,18 +37,18 @@ export class ProjectService {
     return this.projectRepository.create(projectData);
   }
 
-  update(id: number, data: UpdateProjectDto): Project {
-    const project = this.projectRepository.findById(id);
+  async update(id: string, data: UpdateProjectDto): Promise<Project> {
+    const project = await this.projectRepository.findById(id);
 
     if (!project) {
       throw new Error("PROJECT_NOT_FOUND");
     }
 
-    this.validateEquipe(data.idEquipe);
+    await this.validateEquipe(data.idEquipe);
 
     const { dataInicio, dataEntrega, ...rest } = data;
 
-    const updatedProject = this.projectRepository.update(id, {
+    const updatedProject = await this.projectRepository.update(id, {
       ...rest,
       ...(dataInicio !== undefined && {
         dataInicio: new Date(dataInicio),
@@ -65,20 +65,20 @@ export class ProjectService {
     return updatedProject;
   }
 
-  delete(id: number): void {
-    const deleted = this.projectRepository.delete(id);
+  async delete(id: string): Promise<void> {
+    const deleted = await this.projectRepository.delete(id);
 
     if (!deleted) {
       throw new Error("PROJECT_NOT_FOUND");
     }
   }
 
-  private validateEquipe(idEquipe: number | null | undefined): void {
+  private async validateEquipe(idEquipe: string | null | undefined): Promise<void> {
     if (idEquipe == null) {
       return;
     }
 
-    const equipe = this.equipeRepository.findById(idEquipe);
+    const equipe = await this.equipeRepository.findById(idEquipe);
 
     if (!equipe) {
       throw new Error("EQUIPE_NOT_FOUND");
