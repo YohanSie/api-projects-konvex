@@ -81,6 +81,7 @@ __debug_bin*
 !**/.vscode/extensions.json
 .DS_Store
 .idea
+.codex/
 
 # Local compiler baselines and test output
 tsc/testdata/baselines/local
