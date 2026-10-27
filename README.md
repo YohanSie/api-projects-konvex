@@ -8,16 +8,21 @@ API REST para gerenciamento de projetos (`projetos`) e equipes (`equipes`), dese
 
 ## Como começar
 
+Execute na raiz do projeto. Na primeira execução (ou depois de clonar o repositório), prepare o ambiente e inicie a API:
+
 ```bash
 npm install
+cp .env.example .env
 npm run db:migrate
 npm run db:generate
 npm run dev
 ```
 
-Na primeira execução, copie `.env.example` para `.env` antes de rodar as migrations.
+`cp .env.example .env` cria a configuração local com `DATABASE_URL="file:./dev.db"`. Se você já tem um `.env`, mantenha o arquivo e confira se essa variável está definida; não precisa copiá-lo novamente. `db:migrate` aplica as migrations versionadas e cria o banco SQLite se ele ainda não existir. `db:generate` gera o Prisma Client usado pela API.
 
 O servidor inicia em `http://localhost:3000`. A porta está definida em `src/server.ts`.
+
+Nas próximas vezes, com o ambiente já preparado, basta rodar `npm run dev`. Para abrir o banco visualmente, rode `npm run db:studio` em outro terminal.
 
 ## Scripts
 
